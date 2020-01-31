@@ -1,0 +1,71 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var UsersService_1;
+Object.defineProperty(exports, "__esModule", { value: true });
+const common_1 = require("@nestjs/common");
+const mongoose_1 = require("mongoose");
+const mongoose_2 = require("@nestjs/mongoose");
+const hashing_service_1 = require("../hashing/hashing.service");
+let UsersService = UsersService_1 = class UsersService {
+    constructor(userModel, hashingService) {
+        this.userModel = userModel;
+        this.hashingService = hashingService;
+        this.logger = new common_1.Logger(UsersService_1.name);
+    }
+    async getAllUsers() {
+        const users = await this.userModel.find().exec();
+        return users;
+    }
+    async getUserById(userID) {
+        const user = await this.userModel.findById(userID).exec();
+        return user;
+    }
+    async createUser(createUserDTO) {
+        const { password } = createUserDTO, attrs = __rest(createUserDTO, ["password"]);
+        const newPass = await this.hashingService.hash(password);
+        const updatedAttr = Object.assign(Object.assign({}, attrs), { password: newPass });
+        const newUser = new this.userModel(updatedAttr);
+        return await newUser.save();
+    }
+    async updateUser(userID, createUserDTO) {
+        const updatedUser = await this.userModel.findByIdAndUpdate(userID, createUserDTO, { new: true });
+        return updatedUser;
+    }
+    async deleteCustomer(userID) {
+        const deletedUser = await this.userModel.findByIdAndRemove(userID);
+        return deletedUser;
+    }
+    async getUserByEmail(email) {
+        return this.userModel.findOne({ email: email }).exec();
+    }
+};
+UsersService = UsersService_1 = __decorate([
+    common_1.Injectable(),
+    __param(0, mongoose_2.InjectModel('User')),
+    __metadata("design:paramtypes", [mongoose_1.Model,
+        hashing_service_1.HashingService])
+], UsersService);
+exports.UsersService = UsersService;
+//# sourceMappingURL=users.service.js.map

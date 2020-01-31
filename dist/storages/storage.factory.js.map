@@ -1,0 +1,1 @@
+{"version":3,"file":"storage.factory.js","sourceRoot":"","sources":["../../src/storages/storage.factory.ts"],"names":[],"mappings":";;AACA,uDAAmD;AAEnD,MAAa,cAAc;IACzB,MAAM,CAAC,qBAAqB;QAC1B,OAAO,IAAI,gCAAc,CAAC;YACxB,UAAU,CAAC,GAAG,EAAE,IAAI,EAAE,EAAE;gBACtB,EAAE,CAAC,IAAI,EAAE,IAAI,CAAC,CAAC;YACjB,CAAC;SACF,CAAC,CAAC;IACL,CAAC;CACF;AARD,wCAQC"}
